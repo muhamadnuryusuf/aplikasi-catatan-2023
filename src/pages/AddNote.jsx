@@ -1,71 +1,61 @@
 import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-import { addTodo } from "../utils/local";
+import { useNavigate, useParams } from "react-router-dom";
+import { addNote } from "../utils/network";
 import "../App.css";
 
-function AddTodo(props) {
+function AddNote(props) {
   const navigate = useNavigate();
+  const { username } = useParams();
 
-  const [todo, setTodo] = useState({
+  const [note, setNote] = useState({
     title: "",
-    createdAt: "",
-    description: "",
+    body: "",
   });
 
   function onSubmitHandler(event) {
     event.preventDefault();
-    addTodo(todo);
-    navigate("/");
+    addNote(note);
+    console.log(note);
+    navigate(`/${username}`);
   }
 
   return (
-    <div className="p-2 filter">
-      <strong className="fs-1 text-center text-dark">Form Catatan</strong>
+    <div className="p-2">
+      <strong className="fs-1 text-center text-light">Form Add Note</strong>
       <Form
         className="row g-3 m-5 text-light"
         onSubmit={(event) => {
           onSubmitHandler(event);
         }}
       >
-        <Form.Group className="col-md-6 text-start bg-light text-dark">
+        <Form.Group className="col-md-12 text-start">
           <Form.Label>Title</Form.Label>
           <Form.Control
             onChange={(event) => {
               const value = event.target.value;
-              setTodo({ ...todo, title: value });
+              setNote({ ...note, title: value });
             }}
             type="text"
             placeholder="Add Title"
             required
           />
         </Form.Group>
-        <Form.Group className="col-md-6 text-start text-black bg-light">
-          <Form.Label>CreatedAt</Form.Label>
-          <Form.Control
-            onChange={(event) => {
-              const value = event.target.value;
-              setTodo({ ...todo, createdAt: value });
-            }}
-            type="date"
-            required
-          />
-        </Form.Group>
         <Form.Group className="col-12 text-start">
-          <Form.Label>Description</Form.Label>
+          <Form.Label>Body</Form.Label>
           <Form.Control
             onChange={(event) => {
               const value = event.target.value;
-              setTodo({ ...todo, description: value });
+              setNote({ ...note, body: value });
             }}
             type="text"
-            placeholder="Add Description"
+            placeholder="Add Body"
             as="textarea"
             rows={3}
             required
           />
         </Form.Group>
-        {todo.title && todo.createdAt && todo.description ? (
+        {note.title && note.body ? (
           <Button className="col-2 btn-outline-primary position-relative start-50 translate-middle-x" variant="light" type="submit">
             Create
           </Button>
@@ -79,4 +69,4 @@ function AddTodo(props) {
   );
 }
 
-export default AddTodo;
+export default AddNote;
